@@ -4,12 +4,12 @@ import os
 import csv
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ElementTree
+from Sheet import Sheet
 
 class Output(xlsxwriter.Workbook):
     TableOfContent = ""
     one_sheet_ws = ""
     sheet_count = 0
-    current_row = ""
     output_excel = ""
     title_row_num = ""
     many_sheets = ""
@@ -26,6 +26,7 @@ class Output(xlsxwriter.Workbook):
     banner = ""
     percentage = ""
     number = ""
+    current_ws = ""
 
     def __init__(self, output_excel, title_row_num, many_sheets):
         super(self.__class__, self).__init__(output_excel, {'constant_memory': True, 'strings_to_numbers': True})
@@ -40,8 +41,10 @@ class Output(xlsxwriter.Workbook):
         self.many_sheets = many_sheets
         self.current_row = 1
         if not many_sheets:
-            self.one_sheet_ws = self.add_worksheet("Tables")
-
+            # self.one_sheet_ws = self.add_worksheet("Tables")
+            self.one_sheet_ws = Sheet(self, "Tables")
+            self.current_ws = self.one_sheet_ws
+            
     def add_styles(self):
         # Formatting styles
         self.n23_background = self.add_format({ 'bg_color': "#99CCFF", 'border': 1 })
@@ -70,7 +73,7 @@ class Output(xlsxwriter.Workbook):
         output_ws.write(0, 1, "TABLE OF CONTENTS", self.toc_header)
         output_ws.set_row(0, 75)
 
-        output_ws.write(2, 0, "Question", self.blued_style)
+        output_ws.write(2, 0, "Sheet", self.blued_style)
         output_ws.write(2, 1, "Question label", self.blued_style)
         output_ws.write(2, 2, "Base text", self.blued_style)
         output_ws.write(2, 3, "Base", self.blued_style)
@@ -112,38 +115,54 @@ class Output(xlsxwriter.Workbook):
     def close_toc(self):
         self.TableOfContent.write("\n</tables>")
         self.TableOfContent.close()
-
-    def get_current_row(self):
-        return self.current_row
-
-    def add_to_current_row(self, offset):
-        if offset > 0:
-            self.current_row = offset
+        
+    def set_current_ws(self, ws):
+        self.current_ws = ws
+        
+    def get_current_ws(self):
+        return self.current_ws
 
 
 class BaseText:
     def __init__(self, table, row):
-        self.__table = table
-        btext = row[0]
-        table.update_base_text_row()
-        table.set__base_text(btext)
-        table.print_bold(row)
-        table.increment_current_row()
-        if len(row) >= 2 and len(row[1]) > 0:
-            table.set__total(row[1])
+        self.table = table
+        self.row = row
+        table.set_btext_obj(self)  
+        
+    def process(self):
+        btext = self.row[0]
+        self.table.update_base_text_row()
+        self.table.set__base_text(btext)
+        self.table.print_bold(self.row)
+        self.table.increment_current_row()
+        if len(self.row) >= 2 and len(self.row[1]) > 0:
+            self.table.set__total(self.row[1])
 
 
 class Total:
     def __init__(self, table, row):
-        self.__table = table
-        table.set__total(row[1])
-        table.print_total_row(row)
+        self.table = table
+        self.row = row
+        table.set_total_obj(self)      
+        self.row_pos = table.get_data_rows()
+
+    def get_total_row_position(self):
+        return self.row_pos
+    
+    def process(self):
+        self.table.increment_current_row()
+        self.table.set__total(self.row[1])
+        self.table.print_total_row(self.row)
 
 
 class TableName:
     def __init__(self, table, row):
-        self.__table = table
-        ttext = row[0]
-        table.print_bold(row)
-        table.increment_current_row()
-        table.set__table_name(ttext)
+        self.table = table
+        self.ttext = row[0]
+        self.row = row
+        table.set_tableName_obj(self)  
+    
+    def process(self):
+        self.table.print_bold(self.row)
+        self.table.increment_current_row()
+        self.table.set__table_name(self.ttext)

@@ -5,12 +5,13 @@ import sys
 import format_lib as fl
 import Table as table
 import io
+from Sheet import Sheet
 
 t1 = datetime.now()
 
 # USER CHANGED VARIABLES
 title_row_num = 3
-input_document = 'US_DEVICES_Xtab8_Jan16_2016-02-23.csv'
+input_document = 'Amber_11-03-16_uwt_v4.csv'
 many_sheets = True
 output_excel = 'formatted.xlsx'
 decoding = 'cp1251'
@@ -45,6 +46,9 @@ def decode_from_csv(row):
         out.append(temp)
     return out
 
+
+# out.set_current_ws(Sheet(out, "Tables"))
+
 # READING TABLES FROM CSV
 row_count = 1
 frow = True
@@ -60,11 +64,12 @@ for utf8_row in reader:
     if row[0].find('Overlap formulae used.') == 0:     continue
     if row[0] == "#page":
         if not frow:
+            tab.loop_recorded_rows()
             tab.print_footer()
             if many_sheets: tab.close_file()
             tab.append_to_table_of_content()
-            if not many_sheets: out.add_to_current_row(2 + tab.get_current_row())
-        tab = table.Table(out, out.get_sheet_count(), out.get_current_row())
+            if not many_sheets: out.get_current_ws().add_to_current_row(2 + tab.get_current_row())
+        tab = table.Table(out, out.get_sheet_count())
         out.increment_sheet_count()
         frow = False
         row_count = 0
@@ -78,8 +83,9 @@ for utf8_row in reader:
           or row[0].find("Weighted") == 0) and len(row) > 1:
         total = fl.Total(tab, row)
     else:
-        tab.print_content(row)
+        tab.fill_data(row)
     row_count += 1
+tab.loop_recorded_rows()
 tab.print_footer()
 tab.append_to_table_of_content()
 f.close()

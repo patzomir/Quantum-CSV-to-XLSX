@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import re
 import xml.etree.ElementTree as ET
+from Sheet import Sheet
 
 class Table:
     __current_row = 0
@@ -21,24 +22,27 @@ class Table:
     large_row = ""
     current_row_type = ""
     footer = []
+    data = []
 
-    def __init__(self, output, sheet_count=1, current_row=0):
+    def __init__(self, output, sheet_count=1):
         self.out = output
         self.__sheet_count = sheet_count
         if self.out.many_sheets:
             self.__SheetName = "T{0}".format(sheet_count)
-            self.__out_ws = output.add_worksheet(self.__SheetName)
+            self.__out_ws = Sheet(output, self.__SheetName)
         else:
             self.__SheetName = "Tables"
-            self.__out_ws = self.out.one_sheet_ws
-            self.__current_row = current_row
-            self.__row_start = current_row
-        self.print_link_to_contents()
-        self.__out_ws.set_column(0,0,25)
+            self.__out_ws = self.out.get_current_ws()
+        self.__out_ws.get_sheet().set_column(0,0,25)
         self.row_types = []
         for i in range(0,9):
             self.row_types.append(0)
         self.large_row = False
+        self.data = []
+        self.baseTextObj = ""
+        self.totalObj = ""
+        self.tableNameObj = ""
+        self.__row_start = self.__out_ws.get_current_row()
 
     def write(self, *args):
         lst = list(args)
@@ -69,11 +73,11 @@ class Table:
     def append_to_table_of_content(self):
         self.out.TableOfContent.write('<table>\n'
                                       + '<table_id>' + self.wrap_write_to_xml(str(self.__sheet_count)) + '</table_id>\n'
-                                      + '<sheet_name>' + self.wrap_write_to_xml(self.__SheetName) + '</sheet_name>\n'
+                                      + '<sheet_name>' + self.wrap_write_to_xml(self.__out_ws.get_sheetname().encode('utf8')) + '</sheet_name>\n'
                                       + '<name>' + self.wrap_write_to_xml(self.__TableName.encode('utf8')) + '</name>\n'
                                       + '<b_text>' + self.wrap_write_to_xml(self.__BaseText.encode('utf8')) + '</b_text>\n'
                                       + '<total>' + self.wrap_write_to_xml(self.__Total.encode('utf8')) + '</total>\n'
-                                      + '<row_start>' + self.wrap_write_to_xml(str(self.__row_start)) + '</row_start>\n'
+                                      + '<row_start>' + self.wrap_write_to_xml(str(self.__row_start + 1)) + '</row_start>\n'
                                       + '</table>\n')
 
     def set__table_name(self, table_name):
@@ -96,19 +100,19 @@ class Table:
         return self.__Total
 
     def freeze_pane(self):
-        self.__out_ws.freeze_panes(self.__current_row+1, 2)
+        self.__out_ws.freeze_panes(self.__out_ws.get_current_row()+1, 2)
 
     def print_link_to_contents(self):
-        self.write(self.__current_row, 0, '=HYPERLINK("#Contents!B1","Table of content")', self.out.hyperlink)
-        self.__current_row +=1
+        self.write(self.__out_ws.get_current_row(), 0, '=HYPERLINK("#Contents!B1","Table of content")', self.out.hyperlink)
+        self.__out_ws.add_to_current_row(1)
 
     def update_base_text_row(self):
-        if self.__base_text_row == 0: self.__base_text_row = self.__current_row
+        if self.__base_text_row == 0: self.__base_text_row = self.__out_ws.get_current_row()
 
     def n23(self, cell):
-        self.write(self.__current_row, 0, str(cell), self.out.n23_background)
+        self.write(self.__out_ws.get_current_row(), 0, str(cell), self.out.n23_background)
         for i in range(1, self.__max_cell+1):
-            self.write(self.__current_row, i, None, self.out.n23_background)
+            self.write(self.__out_ws.get_current_row(), i, None, self.out.n23_background)
 
     def get_row_type(self, row):
         # Returns the row type:
@@ -162,21 +166,21 @@ class Table:
 
     def print_bold(self, row):
         for i in range(0, len(row)):
-            self.write(self.__current_row, i, row[i], self.out.bold)
+            self.write(self.__out_ws.get_current_row(), i, row[i], self.out.bold)
 
     def print_title(self, row):
         for cell in row:
-            self.write(self.__current_row, 0, cell)
+            self.write(self.__out_ws.get_current_row(), 0, cell)
 
     def print_n23(self, row):
-        self.write(self.__current_row, 0, row[0], self.out.n23_background)
+        self.write(self.__out_ws.get_current_row(), 0, row[0], self.out.n23_background)
         for i in range(1,self.__max_cell):
-            self.write(self.__current_row, i, "", self.out.n23_background)
+            self.write(self.__out_ws.get_current_row(), i, "", self.out.n23_background)
 
     def print_cross_break(self, row):
         check = self.row_types[3] + self.row_types[6]
         if check == 1:
-            self.__current_row += 2
+            self.__out_ws.add_to_current_row(2)
         temp = 0
         if len(row) > self.__max_cell:
             self.__max_cell = len(row)
@@ -184,55 +188,55 @@ class Table:
             if not row[i] == "" and not row[i] == " ":
                 if not temp == 0:
                     if temp + 1 < i:
-                        self.__out_ws.merge_range(self.__current_row,temp,self.__current_row,i-1,row[temp], self.out.banner)
+                        self.__out_ws.get_sheet().merge_range(self.__out_ws.get_current_row(),temp,self.__out_ws.get_current_row(),i-1,row[temp], self.out.banner)
                     else:
-                        self.write(self.__current_row,i-1,row[temp], self.out.banner)
-                        self.write(self.__current_row, i, row[i], self.out.banner)
-                else:   self.write(self.__current_row, i, row[i], self.out.banner)
+                        self.write(self.__out_ws.get_current_row(),i-1,row[temp], self.out.banner)
+                        self.write(self.__out_ws.get_current_row(), i, row[i], self.out.banner)
+                else:   self.write(self.__out_ws.get_current_row(), i, row[i], self.out.banner)
                 temp = i
             else:
-                self.write(self.__current_row, i, '', self.out.banner)
+                self.write(self.__out_ws.get_current_row(), i, '', self.out.banner)
         if temp + 1 <= i and temp > 0 and len(row[temp]) > 1:
-            self.__out_ws.merge_range(self.__current_row,temp,self.__current_row,i,row[temp], self.out.banner)
-        self.__out_ws.set_row(self.__current_row, 25)
+            self.__out_ws.get_sheet().merge_range(self.__out_ws.get_current_row(),temp,self.__out_ws.get_current_row(),i,row[temp], self.out.banner)
+        self.__out_ws.get_sheet().set_row(self.__out_ws.get_current_row(), 25)
 
     def print_tstat(self, row):
         i = 0
         for cell in row:
             pattern = re.compile(ur'[^A-Za-z]', re.UNICODE)
             if len(cell) > 0 and not pattern.search(cell):
-                self.write(self.__current_row, i, cell, self.out.tstat)
+                self.write(self.__out_ws.get_current_row(), i, cell, self.out.tstat)
             else:
-                self.write(self.__current_row, i, cell, self.out.borders)
+                self.write(self.__out_ws.get_current_row(), i, cell, self.out.borders)
             i += 1
 
     def print_regular(self,row):
         i = 0
         for cell in row:
-            self.write(self.__current_row, i, cell, self.out.borders)
+            self.write(self.__out_ws.get_current_row(), i, cell, self.out.borders)
             i += 1
 
     def print_total_row(self,row):
         i = 0
-        self.current_row_type = -1
+        self.__out_ws.add_to_current_row(-1)
         if not self.large_row:
-            self.__out_ws.set_row(self.__current_row - 1, 100)
+            self.__out_ws.get_sheet().set_row(self.__out_ws.get_current_row() - 1, 100)
             self.large_row = True
         for cell in row:
-            self.write(self.__current_row, i, cell, self.out.blued_style, "total row")
+            self.write(self.__out_ws.get_current_row(), i, cell, self.out.blued_style, "total row")
             i += 1
         self.row_types[5] += 1
-        self.__current_row += 1
+        self.__out_ws.add_to_current_row(1)
 
     def print_sub_title(self, row):
         self.add_sub_title(row[0])
         self.print_title(row)
 
     def print_footer(self):
-        self.__current_row += 1
+        self.__out_ws.add_to_current_row(1)
         for row in self.footer:
             self.print_title(row)
-            self.__current_row += 1
+            self.__out_ws.add_to_current_row(1)
 
     def append_to_footer(self, row):
         self.footer.append([row[0][5:]])
@@ -258,18 +262,18 @@ class Table:
         if r_type == 0:
             r_type = 6
         if r_type in (2, 4, 5, 6) and not self.large_row:
-            self.__out_ws.set_row(self.__current_row - 1, 100)
+            self.__out_ws.get_sheet().set_row(self.__out_ws.get_current_row() - 1, 100)
             self.large_row = True
         self.row_types[r_type] += 1
         func = self.switcher(r_type)
         func(row)
         if r_type == 6:
-            self.__out_ws.set_row(self.__current_row, 15)
+            self.__out_ws.get_sheet().set_row(self.__out_ws.get_current_row(), 15)
         if not r_type == 8:
-            self.__current_row += 1
+            self.__out_ws.add_to_current_row(1)
 
     def close_file(self):
-        self.__out_ws._opt_close()
+        self.__out_ws.get_sheet()._opt_close()
 
     def add_sub_title(self, string):
         if len(string) > 0:
@@ -279,4 +283,37 @@ class Table:
         return self.__current_row
 
     def increment_current_row(self):
-        self.__current_row += 1
+        self.__out_ws.add_to_current_row(1)
+    
+    def fill_data(self, row):
+        if row[0].find("$$sheet_name$$") >= 0:
+            row[0] = row[0].replace("$$sheet_name$$", "")
+            self.__out_ws = Sheet(self.out, row[0])
+            self.__row_start = 0
+            self.out.set_current_ws(self.__out_ws)
+            return 0
+        self.data.append(row)
+            
+    def loop_recorded_rows(self):
+        self.print_link_to_contents()
+        self.tableNameObj.process()
+        self.baseTextObj.process()
+        i = 1
+        for row in self.data:        
+            if i == self.totalObj.get_total_row_position():
+                self.totalObj.process()
+            self.print_content(row)
+            i += 1
+        
+    def set_btext_obj(self, obj):
+        self.baseTextObj = obj
+        
+    def set_total_obj(self, obj):
+        self.totalObj = obj
+    
+    def set_tableName_obj(self, obj):
+        self.tableNameObj = obj
+        
+    def get_data_rows(self):
+        return len(self.data)
+        
