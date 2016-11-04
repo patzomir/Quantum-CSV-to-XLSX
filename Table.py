@@ -43,6 +43,7 @@ class Table:
         self.totalObj = ""
         self.tableNameObj = ""
         self.__row_start = self.__out_ws.get_current_row()
+        self.btxt = 0
 
     def write(self, *args):
         lst = list(args)
@@ -259,6 +260,9 @@ class Table:
         self.current_row_type = r_type
         if r_type == 0 and self.row_types[5] == 0:
             return
+        if not r_type == 7 and self.btxt == 0:
+            self.baseTextObj.process()
+            self.btxt = 1
         if r_type == 0:
             r_type = 6
         if r_type in (2, 4, 5, 6) and not self.large_row:
@@ -297,7 +301,6 @@ class Table:
     def loop_recorded_rows(self):
         self.print_link_to_contents()
         self.tableNameObj.process()
-        self.baseTextObj.process()
         i = 1
         for row in self.data:        
             if i == self.totalObj.get_total_row_position():
