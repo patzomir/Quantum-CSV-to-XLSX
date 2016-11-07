@@ -2,6 +2,7 @@
 import re
 import xml.etree.ElementTree as ET
 from Sheet import Sheet
+import format_lib
 
 class Table:
     __current_row = 0
@@ -39,9 +40,9 @@ class Table:
             self.row_types.append(0)
         self.large_row = False
         self.data = []
-        self.baseTextObj = ""
-        self.totalObj = ""
-        self.tableNameObj = ""
+        self.baseTextObj = format_lib.BaseText(self, [''])
+        self.totalObj = format_lib.Total(self, [''])
+        self.tableNameObj = format_lib.TableName(self, [''])
         self.__row_start = self.__out_ws.get_current_row()
         self.btxt = 0
 
