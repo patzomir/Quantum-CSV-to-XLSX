@@ -166,3 +166,6 @@ class TableName:
         self.table.print_bold(self.row)
         self.table.increment_current_row()
         self.table.set__table_name(self.ttext)
+
+    def get_row(self):
+        return self.row

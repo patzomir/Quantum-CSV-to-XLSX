@@ -62,6 +62,7 @@ for utf8_row in reader:
     if row[0].find('* small base') == 0:      continue
     if row[0].find('** very small') == 0:     continue
     if row[0].find('Overlap formulae used.') == 0:     continue
+    if row[0].find('$$sheet_name$$') >= 0:  tab.process_sheet_name_row(row);continue
     if row[0] == "#page":
         if not frow:
             tab.loop_recorded_rows()

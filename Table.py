@@ -258,10 +258,11 @@ class Table:
 
     def print_content(self, row):
         r_type = self.get_row_type(row)
-        self.current_row_type = r_type
+        self.current_row_type = r_type        
         if r_type == 0 and self.row_types[5] == 0:
             return
-        if not r_type == 7 and self.btxt == 0:
+        if not r_type == 7 and self.btxt == 0: 
+            self.tableNameObj.process()
             self.baseTextObj.process()
             self.btxt = 1
         if r_type == 0:
@@ -292,18 +293,20 @@ class Table:
     
     def fill_data(self, row):
         if row[0].find("$$sheet_name$$") >= 0:
-            row[0] = row[0].replace("$$sheet_name$$", "")
-            self.__out_ws = Sheet(self.out, row[0])
-            self.__row_start = 0
-            self.out.set_current_ws(self.__out_ws)
+            process_sheet_name_row(row)
             return 0
         self.data.append(row)
-            
+
+    def process_sheet_name_row(self, row):
+        row[0] = row[0].replace("$$sheet_name$$", "")
+        self.__out_ws = Sheet(self.out, row[0])
+        self.__row_start = 0
+        self.out.set_current_ws(self.__out_ws)
+        
     def loop_recorded_rows(self):
         self.print_link_to_contents()
-        self.tableNameObj.process()
         i = 1
-        for row in self.data:        
+        for row in self.data:
             if i == self.totalObj.get_total_row_position():
                 self.totalObj.process()
             self.print_content(row)
