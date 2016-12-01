@@ -60,7 +60,7 @@ class Table:
                 lst[3] = self.out.blued_style_pc
         elif re.search('^[0-9.]+$', str(lst[2].encode('utf8','replace'))) and self.current_row_type in (4,5):
             lst[3] = self.out.number
-        elif lst[2].encode('utf8','replace') == "-":
+        elif lst[2].encode('utf8','replace') in [ "-", "- " ]:
             lst[3] = self.out.center
         if len(lst) > 4:
             del lst[4:]
