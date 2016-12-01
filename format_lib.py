@@ -27,6 +27,8 @@ class Output(xlsxwriter.Workbook):
     percentage = ""
     number = ""
     current_ws = ""
+    unique = []
+    center = ""
 
     def __init__(self, output_excel, title_row_num, many_sheets):
         super(self.__class__, self).__init__(output_excel, {'constant_memory': True, 'strings_to_numbers': True})
@@ -40,18 +42,22 @@ class Output(xlsxwriter.Workbook):
         self.add_styles()
         self.many_sheets = many_sheets
         self.current_row = 1
+        self.table_number = 0
         if not many_sheets:
             # self.one_sheet_ws = self.add_worksheet("Tables")
             self.one_sheet_ws = Sheet(self, "Tables")
+            self.tables_sheet = self.one_sheet_ws
             self.current_ws = self.one_sheet_ws
             
     def add_styles(self):
         # Formatting styles
         self.n23_background = self.add_format({ 'bg_color': "#99CCFF", 'border': 1 })
+        # OLD ONE 'bg_color': "#376091"
         self.blued_style = self.add_format({'font_name': 'Calibri', 'font_size': 11, 'bold': True, 'font_color': 'white',
-                            'align': 'center', 'valign': 'vcenter', 'bg_color': "#376091", 'border': 1, 'text_wrap': True})
+                            'align': 'center', 'valign': 'vcenter', 'bg_color': "#375F91", 'border': 1, 'text_wrap': True})
         self.hyperlink = self.add_format({ 'underline': 'single', 'font_color': '#0000EE' })
         self.borders = self.add_format({ 'border': 1, 'align': 'left', 'valign': 'vcenter'})
+        self.center = self.add_format({ 'border': 1, 'align': 'center', 'valign': 'vcenter'})
         self.tstat = self.add_format({ 'bg_color':  "#FFFF99", 'border': 1, 'align': 'center' })
         self.bold = self.add_format({ 'bold': True })
         self.toc = self.add_format({ 'text_wrap': True, 'border': 1 })
@@ -61,7 +67,7 @@ class Output(xlsxwriter.Workbook):
         self.percentage = self.add_format({ 'border': 1, 'align': 'center', 'valign': 'vcenter',
                                    'num_format': '0%'})
         self.blued_style_pc = self.add_format({'font_name': 'Calibri', 'font_size': 11, 'bold': True, 'font_color': 'white',
-                            'align': 'center', 'valign': 'vcenter', 'bg_color': "#376091", 'border': 1, 'text_wrap': True,
+                            'align': 'center', 'valign': 'vcenter', 'bg_color': "#375F91", 'border': 1, 'text_wrap': True,
                                                'num_format': '0%'})
         self.number = self.add_format({ 'border': 1, 'align': 'center', 'valign': 'vcenter'})
 
@@ -82,11 +88,17 @@ class Output(xlsxwriter.Workbook):
         tree = ET.parse('TableOfContent.txt')
         root = tree.getroot()
 
+        self.unique = []
+        
         for table in root.iter('table'):
             x = 0
+            if not table.find('sheet_name').text in self.unique:
+                self.unique.append(table.find('sheet_name').text)
             output_ws.write(i, 0, table.find('sheet_name').text, self.toc)
-            link = "#" + table.find('sheet_name').text + "!A" + table.find('row_start').text
+            link = "internal:#'" + table.find('sheet_name').text + "'!A" + table.find('row_start').text
             output_ws.write_url(i, 1, link, self.toc_hyperlink, table.find('name').text)
+            #link_v2 = '=HYPERLINK(' + link + ",\"" + table.find('name').text + "\")"
+            #output_ws.write(i, 1, link_v2, self.toc_hyperlink)
             output_ws.write(i, 2, table.find('b_text').text, self.toc)
             output_ws.write(i, 3, table.find('total').text, self.toc)
             i += 1
@@ -121,6 +133,14 @@ class Output(xlsxwriter.Workbook):
         
     def get_current_ws(self):
         return self.current_ws
+
+    def check_tables_sheet(self):
+        if not 'Tables' in self.unique and not self.many_sheets:         
+            self.tables_sheet.get_sheet().hide()
+
+    def get_table_number(self):
+        self.table_number += 1
+        return self.table_number
 
 
 class BaseText:
@@ -160,7 +180,8 @@ class TableName:
         self.table = table
         self.ttext = row[0]
         self.row = row
-        table.set_tableName_obj(self)  
+        table.set_tableName_obj(self)
+        self.row_pos = table.get_data_rows()
     
     def process(self):
         self.table.print_bold(self.row)
@@ -169,3 +190,6 @@ class TableName:
 
     def get_row(self):
         return self.row
+    
+    def get_total_row_position(self):
+        return self.row_pos

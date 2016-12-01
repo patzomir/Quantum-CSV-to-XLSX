@@ -60,6 +60,8 @@ class Table:
                 lst[3] = self.out.blued_style_pc
         elif re.search('^[0-9.]+$', str(lst[2].encode('utf8','replace'))) and self.current_row_type in (4,5):
             lst[3] = self.out.number
+        elif lst[2].encode('utf8','replace') == "-":
+            lst[3] = self.out.center
         if len(lst) > 4:
             del lst[4:]
         t = tuple(lst)
@@ -105,7 +107,9 @@ class Table:
         self.__out_ws.freeze_panes(self.__out_ws.get_current_row()+1, 2)
 
     def print_link_to_contents(self):
-        self.write(self.__out_ws.get_current_row(), 0, '=HYPERLINK("#Contents!B1","Table of content")', self.out.hyperlink)
+        link = "internal:#'Contents'!B" + str(self.out.get_table_number()+3)
+        self.__out_ws.get_sheet().write_url(self.__out_ws.get_current_row(), 0, link,
+                                            self.out.hyperlink,  "Table of content")
         self.__out_ws.add_to_current_row(1)
 
     def update_base_text_row(self):
@@ -240,6 +244,12 @@ class Table:
             self.print_title(row)
             self.__out_ws.add_to_current_row(1)
 
+    def print_center(self, row):
+        i = 0
+        for cell in row:
+            self.write(self.__out_ws.get_current_row(), i, cell, self.out.center)
+            i += 1
+
     def append_to_footer(self, row):
         self.footer.append([row[0][5:]])
 
@@ -250,7 +260,7 @@ class Table:
             3: self.print_cross_break,
             4: self.print_tstat,
             5: self.print_regular,
-            6: self.print_regular,
+            6: self.print_center,
             7: self.print_sub_title,
             8: self.append_to_footer,
         }
@@ -261,8 +271,7 @@ class Table:
         self.current_row_type = r_type        
         if r_type == 0 and self.row_types[5] == 0:
             return
-        if not r_type == 7 and self.btxt == 0: 
-            self.tableNameObj.process()
+        if not r_type in [ 1, 7 ] and self.btxt == 0: 
             self.baseTextObj.process()
             self.btxt = 1
         if r_type == 0:
@@ -307,8 +316,11 @@ class Table:
         self.print_link_to_contents()
         i = 1
         for row in self.data:
+            if i == self.tableNameObj.get_total_row_position()+1:
+                self.tableNameObj.process()
             if i == self.totalObj.get_total_row_position():
                 self.totalObj.process()
+                i += 1; continue
             self.print_content(row)
             i += 1
         

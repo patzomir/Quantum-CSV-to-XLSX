@@ -91,8 +91,10 @@ tab.print_footer()
 tab.append_to_table_of_content()
 f.close()
 
+
 out.close_toc()
 out.add_toc()
+out.check_tables_sheet()
 out.close()
 
 print (datetime.now() - t1)
