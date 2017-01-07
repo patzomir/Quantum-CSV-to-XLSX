@@ -1,0 +1,700 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+<tables>
+<table>
+<table_id>1</table_id>
+<sheet_name>T1</sheet_name>
+<name>AGE. How old are you?</name>
+<b_text>All Respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>2</table_id>
+<sheet_name>T2</sheet_name>
+<name>QGENDER. Are you…?</name>
+<b_text>All Respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>3</table_id>
+<sheet_name>T3</sheet_name>
+<name>QETHNICITY. To which of these ethnic groups do you consider you belong?</name>
+<b_text>All Respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>4</table_id>
+<sheet_name>T4</sheet_name>
+<name>QBOROUGH. Which London borough do you live in?</name>
+<b_text>All Respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>5</table_id>
+<sheet_name>T5</sheet_name>
+<name>QEMPLOYMENT. Are you…?</name>
+<b_text>All Respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>6</table_id>
+<sheet_name>T6</sheet_name>
+<name>QSEG. What is the occupation of the chief income earner in your household?</name>
+<b_text>All Respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>7</table_id>
+<sheet_name>T7</sheet_name>
+<name>QFREQ. Buses: How often do you use buses to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>8</table_id>
+<sheet_name>T8</sheet_name>
+<name>QFREQ. Underground/ Tube:  How often do you use the Underground/ Tube to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>9</table_id>
+<sheet_name>T9</sheet_name>
+<name>QFREQ. DLR (Docklands Light Railway):  How often do you use the DLR to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>10</table_id>
+<sheet_name>T10</sheet_name>
+<name>QFREQ. London Overground trains:  How often do you use London Overground trains to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>11</table_id>
+<sheet_name>T11</sheet_name>
+<name>QFREQ. National Rail trains: How often do you use National Rail trains to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>12</table_id>
+<sheet_name>T12</sheet_name>
+<name>QFREQ. Tram:  How often do you use trams to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>13</table_id>
+<sheet_name>T13</sheet_name>
+<name>QFREQ. Motorbike/ moped/ scooter:  Typically, how often do you use a motorbike/ moped or scooter to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>14</table_id>
+<sheet_name>T14</sheet_name>
+<name>QFREQ. Bicycle:  How often do you use a bicycle to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>15</table_id>
+<sheet_name>T15</sheet_name>
+<name>QFREQ. Black cab/ Taxi:  How often do you use Black cabs/Taxis to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>16</table_id>
+<sheet_name>T16</sheet_name>
+<name>QFREQ. Minicab (not black cab):  How often do you use Minicabs to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>17</table_id>
+<sheet_name>T17</sheet_name>
+<name>QFREQ. Public transport:  How often do you use Public transport to get around London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>18</table_id>
+<sheet_name>T18</sheet_name>
+<name>QFREQ2. Commute: How often do you commute in London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>19</table_id>
+<sheet_name>T19</sheet_name>
+<name>QFREQ2. Other Business Travel: How often do you make other business trips in London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>20</table_id>
+<sheet_name>T20</sheet_name>
+<name>QFREQ2. Personal business (such as going to the doctors): How often do you make personal trips in London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>21</table_id>
+<sheet_name>T21</sheet_name>
+<name>QFREQ2. Leisure/ social: How often do you make leisure or social trips in London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>22</table_id>
+<sheet_name>T22</sheet_name>
+<name>QFREQ2. ALL: How often do you make each of these types of journey in London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>23</table_id>
+<sheet_name>T23</sheet_name>
+<name>QTICK. Which of the following do you use to pay for travel on public transport in London?</name>
+<b_text>All who use Public transport</b_text>
+<total>997</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>24</table_id>
+<sheet_name>T24</sheet_name>
+<name>OYST3. Can I just check, do you currently have an Oyster card?</name>
+<b_text>All not mentioning Oyster at QTICK</b_text>
+<total>296</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>25</table_id>
+<sheet_name>T25</sheet_name>
+<name>QTICK/ OYST3</name>
+<b_text>All respondents</b_text>
+<total>997</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>26</table_id>
+<sheet_name>T26</sheet_name>
+<name>OA1. Have you ever set up an Online Oyster Account to manage your Oyster Card online?</name>
+<b_text>All Oyster card users</b_text>
+<total>833</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>27</table_id>
+<sheet_name>T27</sheet_name>
+<name>I1x1 How often do you use the Internet at home?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>28</table_id>
+<sheet_name>T28</sheet_name>
+<name>I1x2 How often do you use the Internet at work?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>29</table_id>
+<sheet_name>T29</sheet_name>
+<name>I1x3 How often do you use the Internet on the move?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>30</table_id>
+<sheet_name>T30</sheet_name>
+<name>I1 Frequency of using the internet</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>31</table_id>
+<sheet_name>T31</sheet_name>
+<name>I2. Which of the following do you use the internet for?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>32</table_id>
+<sheet_name>T32</sheet_name>
+<name>I3. Which of the following devices do you use to access the Internet</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>33</table_id>
+<sheet_name>T33</sheet_name>
+<name>I3b. Which of the following devices do you use to access the internet?</name>
+<b_text>All Internet users on a Smartphone</b_text>
+<total>784</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>34</table_id>
+<sheet_name>T34</sheet_name>
+<name>I3c. How often do you access the internet via a mobile device to send or receive emails, browse the internet, use apps or for any other purposes?</name>
+<b_text>All Internet users on a Smartphone</b_text>
+<total>883</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>35</table_id>
+<sheet_name>T35</sheet_name>
+<name>I5. Which of the following do you use the internet for on a mobile device?</name>
+<b_text>All Internet users on a mobile device</b_text>
+<total>883</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>36</table_id>
+<sheet_name>T36</sheet_name>
+<name>I6. How often do you use the Internet in relation to travel in London? This includes for travel information, travel planning and buying tickets for travel</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>37</table_id>
+<sheet_name>T37</sheet_name>
+<name>I7. Still thinking specifically about travelling in London, which of the following do you use the Internet for?</name>
+<b_text>All Internet users for travel in London</b_text>
+<total>917</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>38</table_id>
+<sheet_name>T38</sheet_name>
+<name>I9. How often do you use the Transport for London website, (this includes the Journey Planner, Oyster, Congestion Charging and Santander Cycle Hire websites)?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>39</table_id>
+<sheet_name>T39</sheet_name>
+<name>I10a. Please rate your experience of the TfL website overall …</name>
+<b_text>All using TfL website</b_text>
+<total>895</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>40</table_id>
+<sheet_name>T40</sheet_name>
+<name>I10a. Please rate your experience of the TfL website overall …</name>
+<b_text>All using TfL website</b_text>
+<total>60*</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>41</table_id>
+<sheet_name>T41</sheet_name>
+<name>I10a. Please rate your experience of the TfL website overall …</name>
+<b_text>All using TfL website</b_text>
+<total>456</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>42</table_id>
+<sheet_name>T42</sheet_name>
+<name>I10a. Please rate your experience of the TfL website overall …</name>
+<b_text>All using TfL website</b_text>
+<total>762</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>43</table_id>
+<sheet_name>T43</sheet_name>
+<name>I10b. And thinking about the TfL website overall, how satisfied are you with it on a scale of 0 to 10, where 10 is extremely satisfied and 0 is extremely dissatisfied?</name>
+<b_text>All using TfL website</b_text>
+<total>895</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>44</table_id>
+<sheet_name>T44</sheet_name>
+<name>I10b. And thinking about the TfL website overall, how satisfied are you with it on a scale of 0 to 10, where 10 is extremely satisfied and 0 is extremely dissatisfied?</name>
+<b_text>All using TfL website</b_text>
+<total>154</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>45</table_id>
+<sheet_name>T45</sheet_name>
+<name>I11. Which of the following do you use/ have you used the TfL website for?</name>
+<b_text>All using TfL website</b_text>
+<total>895</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>46</table_id>
+<sheet_name>T46</sheet_name>
+<name>I12a. Which of the following devices do you use to access the TfL website?</name>
+<b_text>All using TfL website</b_text>
+<total>895</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>47</table_id>
+<sheet_name>T47</sheet_name>
+<name>I12a. Which of the following devices do you use to access the TfL website?</name>
+<b_text>All using TfL website</b_text>
+<total>456</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>48</table_id>
+<sheet_name>T48</sheet_name>
+<name>I12b. How often do you access the Transport for London website through a mobile device?</name>
+<b_text>All accessing TfL through a mobile device</b_text>
+<total>619</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>49</table_id>
+<sheet_name>T49</sheet_name>
+<name>I12b. How often do you access the Transport for London website through a mobile device?</name>
+<b_text>All accessing TfL through a mobile device</b_text>
+<total>360</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>50</table_id>
+<sheet_name>T50</sheet_name>
+<name>I12b. How often do you access the Transport for London website through a mobile device?</name>
+<b_text>All accessing TfL through a mobile device</b_text>
+<total>487</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>51</table_id>
+<sheet_name>T51</sheet_name>
+<name>I13. Desktop PC or laptop: How satisfied are you with the TfL website through each of these devices?</name>
+<b_text>All using TfL website through each device</b_text>
+<total>762</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>52</table_id>
+<sheet_name>T52</sheet_name>
+<name>I13. Tablet: How satisfied are you with the TfL website through each of these devices?</name>
+<b_text>All using TfL website through each device</b_text>
+<total>327</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>53</table_id>
+<sheet_name>T53</sheet_name>
+<name>I13. Smartphone: How satisfied are you with the TfL website through each of these devices?</name>
+<b_text>All using TfL website through each device</b_text>
+<total>525</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>54</table_id>
+<sheet_name>T54</sheet_name>
+<name>I14. How would you rate the TfL website recently – is it…</name>
+<b_text>All using TfL website</b_text>
+<total>895</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>55</table_id>
+<sheet_name>T55</sheet_name>
+<name>A1. Do you use any apps, either free or paid for?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>56</table_id>
+<sheet_name>T56</sheet_name>
+<name>A3. Do you use specific apps in relation to travel in London? This includes for travel information, travel planning and buying tickets for travel.</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>57</table_id>
+<sheet_name>T57</sheet_name>
+<name>A4. Which of the following do you use your London Travel Apps for?</name>
+<b_text>All using London travel apps</b_text>
+<total>463</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>58</table_id>
+<sheet_name>T58</sheet_name>
+<name>A5. Which of the following London Travel apps do you use?</name>
+<b_text>All using London travel apps</b_text>
+<total>463</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>59</table_id>
+<sheet_name>T59</sheet_name>
+<name>A6. When you are using your mobile device, do you generally prefer to use apps or go to a website?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>60</table_id>
+<sheet_name>T60</sheet_name>
+<name>A7. Why do you say that?</name>
+<b_text>All saying sometimes prefer to use apps/ sometimes websites or always prefer websites</b_text>
+<total>747</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>61</table_id>
+<sheet_name>T61</sheet_name>
+<name>A7. Why do you say that?</name>
+<b_text>All saying sometimes prefer to use apps, sometimes prefer to use websites (A6=2)</b_text>
+<total>438</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>62</table_id>
+<sheet_name>T62</sheet_name>
+<name>A7. Why do you say that?</name>
+<b_text>All saying always prefer to use websites (A6=3)</b_text>
+<total>309</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>63</table_id>
+<sheet_name>T63</sheet_name>
+<name>SM1. Which of these do you regularly use?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>64</table_id>
+<sheet_name>T64</sheet_name>
+<name>SM1Bx1. Social media would miss the most</name>
+<b_text>All mentioning two or more social media at SM1</b_text>
+<total>656</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>65</table_id>
+<sheet_name>T65</sheet_name>
+<name>SM1Bx1/ SM1Bx2/ SM1Bx3. Social media would miss the most/ second most or third most</name>
+<b_text>All mentioning four or more social media at SM1</b_text>
+<total>264</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>66</table_id>
+<sheet_name>T66</sheet_name>
+<name>SM1c. Facebook: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>760</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>67</table_id>
+<sheet_name>T67</sheet_name>
+<name>SM1c. Twitter: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>330</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>68</table_id>
+<sheet_name>T68</sheet_name>
+<name>SM1c. LinkedIn: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>227</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>69</table_id>
+<sheet_name>T69</sheet_name>
+<name>SM1c. YouTube: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>513</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>70</table_id>
+<sheet_name>T70</sheet_name>
+<name>SM1c. Google+: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>170</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>71</table_id>
+<sheet_name>T71</sheet_name>
+<name>SM1c. Pinterest: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>90*</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>72</table_id>
+<sheet_name>T72</sheet_name>
+<name>SM1c. Instagram: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>191</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>73</table_id>
+<sheet_name>T73</sheet_name>
+<name>SM1c. Tumblr: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>41*</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>74</table_id>
+<sheet_name>T74</sheet_name>
+<name>SM1c. Snapchat: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>84*</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>75</table_id>
+<sheet_name>T75</sheet_name>
+<name>SM1c. Other: Please indicate which of the following purposes you like to use each of these for.</name>
+<b_text>All using each social medium at SM1</b_text>
+<total>13*</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>76</table_id>
+<sheet_name>T76</sheet_name>
+<name>SM2. Do you ever use social media for London travel information e.g. journey planning, information on current service status?</name>
+<b_text>All using social media</b_text>
+<total>827</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>77</table_id>
+<sheet_name>T77</sheet_name>
+<name>SM2B. Which of these do you use for London travel information e.g. journey planning, information on current service status?</name>
+<b_text>All mentioning two or more social media at SM1</b_text>
+<total>214</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>78</table_id>
+<sheet_name>T78</sheet_name>
+<name>SM2B. Which of these do you use for London travel information e.g. journey planning, information on current service status? COMBINED</name>
+<b_text>All using social media for London travel information</b_text>
+<total>233</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>79</table_id>
+<sheet_name>T79</sheet_name>
+<name>RT1. And now just thinking about real-time ‘live’ travel information (such as updates on services, delays, disruptions) which of the following do you use to access this information?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>80</table_id>
+<sheet_name>T80</sheet_name>
+<name>RT2. Thinking about the various means of obtaining information about problems or delays encountered during your journey in London, which of these do you use...?</name>
+<b_text>All accessing real time travel information</b_text>
+<total>889</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>81</table_id>
+<sheet_name>T81</sheet_name>
+<name>RT2. Thinking about the various means of obtaining information about problems or delays encountered during your journey in London, which of these do you use...?</name>
+<b_text>All accessing real time travel information</b_text>
+<total>659</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>82</table_id>
+<sheet_name>T82</sheet_name>
+<name>EMAIL1. TfL contacts customers from time to time with travel-related information emails. These can be about any of TfL's services such as about weekend tube closures, bus diversions,</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>83</table_id>
+<sheet_name>T83</sheet_name>
+<name>EMAIL2. How useful do you find the information in these emails?</name>
+<b_text>All receiving TfL travel related emails</b_text>
+<total>562</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>84</table_id>
+<sheet_name>T84</sheet_name>
+<name>F1. Which of the following have you ever seen when travelling in London?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>85</table_id>
+<sheet_name>T85</sheet_name>
+<name>F2. Which of the following do you regularly use to help plan your journey when travelling in London?</name>
+<b_text>All who have seen any electronic information displays when travelling in London</b_text>
+<total>934</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>86</table_id>
+<sheet_name>T86</sheet_name>
+<name>F2. Which of the following do you regularly use to help plan your journey when travelling in London?</name>
+<b_text>All who have seen any electronic information displays when travelling in London</b_text>
+<total>819</total>
+<row_start>1</row_start>
+</table>
+<table>
+<table_id>87</table_id>
+<sheet_name>T87</sheet_name>
+<name>QDISABILITY. Finally, do you have any long-term physical or mental impairment which limits your daily activities or the work you can do, including problems due to old age?</name>
+<b_text>All respondents</b_text>
+<total>1017</total>
+<row_start>1</row_start>
+</table>
+
+</tables>

@@ -80,9 +80,9 @@ for utf8_row in reader:
           row[0].find("Base:") >= 0 or
           row[0].find("Base-") >= 0) and (len(row) == 1 or len(row[1]) == 0):
         base_text = fl.BaseText(tab, row)
-    elif (row[0].find("Total") == 0 or row[0].find("Base") == 0
-          or row[0].find("Weighted") == 0) and len(row) > 1:
-        total = fl.Total(tab, row)
+    #elif (row[0].find("Total") == 0 or row[0].find("Base") == 0
+    #      or row[0].find("Weighted") == 0) and len(row) > 1:
+    #    total = fl.Total(tab, row)
     else:
         tab.fill_data(row)
     row_count += 1

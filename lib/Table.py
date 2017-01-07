@@ -36,7 +36,7 @@ class Table:
             self.__out_ws = self.out.get_current_ws()
         self.__out_ws.get_sheet().set_column(0,0,25)
         self.row_types = []
-        for i in range(0,9):
+        for i in range(0,11):
             self.row_types.append(0)
         self.large_row = False
         self.data = []
@@ -104,7 +104,7 @@ class Table:
         return self.__Total
 
     def freeze_pane(self):
-        self.__out_ws.freeze_panes(self.__out_ws.get_current_row()+1, 2)
+        self.__out_ws.get_sheet().freeze_panes(self.__out_ws.get_current_row()+1, 2)
 
     def print_link_to_contents(self):
         link = "internal:#'Contents'!B" + str(self.out.get_table_number()+3)
@@ -131,12 +131,21 @@ class Table:
         # Row Type 6 = tstat letters in cross-break
         # Row Type 7 = sub-title
         # Row Type 8 = foot note
+        # Row Type 9 = Total row
+        # Row Type 10 = Unweighted Base
         rtype = 0
         temp = 0
         tstat_cb = True
 
         if row[0].find("bot:") == 0:
             return 8
+
+        if (row[0].find("Unweighted") == 0) and len(row) > 1:
+            return 10
+
+        if (row[0].find("Total") == 0 or row[0].find("Base") == 0
+          or row[0].find("Weighted") == 0) and len(row) > 1:
+            return 9
         
         for cell in row:
             pattern = re.compile(ur'[^ ]', re.UNICODE)
@@ -223,16 +232,23 @@ class Table:
             i += 1
 
     def print_total_row(self,row):
+        self.set__total(row[1])
         i = 0
-        self.__out_ws.add_to_current_row(-1)
+        #self.__out_ws.add_to_current_row(-1)
         if not self.large_row:
             self.__out_ws.get_sheet().set_row(self.__out_ws.get_current_row() - 1, 100)
             self.large_row = True
         for cell in row:
             self.write(self.__out_ws.get_current_row(), i, cell, self.out.blued_style, "total row")
             i += 1
-        self.row_types[5] += 1
-        self.__out_ws.add_to_current_row(1)
+        #self.row_types[5] += 1
+        #self.__out_ws.add_to_current_row(1)
+
+    def print_unweighted_base(self,row):
+        if not self.large_row:
+            self.__out_ws.get_sheet().set_row(self.__out_ws.get_current_row() - 1, 100)
+            self.large_row = True
+        self.print_center(row)
 
     def print_sub_title(self, row):
         self.add_sub_title(row[0])
@@ -263,6 +279,8 @@ class Table:
             6: self.print_center,
             7: self.print_sub_title,
             8: self.append_to_footer,
+            9: self.print_total_row,
+            10: self.print_unweighted_base,
         }
         return switch.get(arg)
 
@@ -314,13 +332,14 @@ class Table:
         
     def loop_recorded_rows(self):
         self.print_link_to_contents()
-        i = 1
+        i = 0
         for row in self.data:
             if i == self.tableNameObj.get_total_row_position()+1:
                 self.tableNameObj.process()
-            if i == self.totalObj.get_total_row_position():
-                self.totalObj.process()
-                i += 1; continue
+                i += 1
+            #if i == self.totalObj.get_total_row_position():
+            #    self.totalObj.process()
+            #    i += 1; continue
             self.print_content(row)
             i += 1
         
