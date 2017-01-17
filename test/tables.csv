@@ -1,0 +1,17 @@
+#page,,,,,
+set title,,,,,
+Table title,,,,,
+subtitle,,,,,
+Base: all,,,,,
+,,,,,
+,,banner1,,banner2,
+,,,,,
+,Total,subbanner1,subbanner2,subbanner1,subbanner2
+,,,,,
+Total,100,20,80,40,60
+,,,,,
+Row1,5,4,1,3,2
+,,,,,
+Row2,7,5,2,4,3
+,,,,,
+Row3,60,20,40,40,20

@@ -181,7 +181,7 @@ class TableName:
         self.ttext = row[0]
         self.row = row
         table.set_tableName_obj(self)
-        self.row_pos = table.get_data_rows()
+        self.row_pos = table.get_data_rows() - 1
     
     def process(self):
         self.table.print_bold(self.row)

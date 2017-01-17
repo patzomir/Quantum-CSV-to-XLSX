@@ -1,0 +1,12 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+<tables>
+<table>
+<table_id>1</table_id>
+<sheet_name>T1</sheet_name>
+<name>Table title - subtitle</name>
+<b_text>all</b_text>
+<total>100</total>
+<row_start>1</row_start>
+</table>
+
+</tables>
