@@ -45,6 +45,7 @@ class Table:
         self.tableNameObj = format_lib.TableName(self, [''])
         self.__row_start = self.__out_ws.get_current_row()
         self.btxt = 0
+        self.footer = []
 
     def write(self, *args):
         lst = list(args)
