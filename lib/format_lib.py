@@ -6,6 +6,38 @@ import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ElementTree
 from Sheet import Sheet
 
+
+class CsvOutput:
+    many_sheets = False
+
+    def __init__(self, output_file):
+        self.worksheet = ""
+        self.first_table = True
+        self.output_file = output_file
+        self.file = self.clear_out_file()
+
+    def clear_out_file(self):
+        return open(self.output_file, 'w')
+
+    def set_current_ws(self, worksheet):
+        self.worksheet = worksheet
+
+    def get_current_ws(self):
+        return self.worksheet
+
+    def get_sheet_count(self):
+        return None
+
+    def increment_sheet_count(self):
+        pass
+
+    def print_headers(self):
+        if self.first_table:
+            self.first_table = False
+            return True
+        return False
+
+
 class Output(xlsxwriter.Workbook):
     TableOfContent = ""
     one_sheet_ws = ""

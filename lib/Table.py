@@ -3,6 +3,19 @@ import re
 import xml.etree.ElementTree as ET
 from Sheet import Sheet
 import format_lib
+import pandas as pd
+from io import StringIO
+from mean_list import mean_escapes
+from datetime import datetime
+import os
+
+
+
+order = ["Sheet name:", "Title:", "Head 1:", "Head 2:", "Head 3:",
+         "Head 4:", "Head 5:", "Break:",
+         "Letter:", "Statement:", "Unweighted base:", "Weighted base:",
+         "Total", "Absolutes:", "%", "T-test"]
+
 
 class Table:
     __current_row = 0
@@ -24,17 +37,11 @@ class Table:
     current_row_type = ""
     footer = []
     data = []
+    __for_tableu = False
 
-    def __init__(self, output, sheet_count=1):
+    def __init__(self, output, sheet_count=1, for_tableu=False):
         self.out = output
         self.__sheet_count = sheet_count
-        if self.out.many_sheets:
-            self.__SheetName = "T{0}".format(sheet_count)
-            self.__out_ws = Sheet(output, self.__SheetName)
-        else:
-            self.__SheetName = "Tables"
-            self.__out_ws = self.out.get_current_ws()
-        self.__out_ws.get_sheet().set_column(0,0,25)
         self.row_types = []
         for i in range(0,11):
             self.row_types.append(0)
@@ -43,14 +50,26 @@ class Table:
         self.baseTextObj = format_lib.BaseText(self, [''])
         self.totalObj = format_lib.Total(self, [''])
         self.tableNameObj = format_lib.TableName(self, [''])
-        self.__row_start = self.__out_ws.get_current_row()
         self.btxt = 0
         self.footer = []
+        self.__for_tableu = for_tableu
+
+        if self.out.many_sheets:
+            self.__SheetName = "T{0}".format(sheet_count)
+        else:
+            self.__SheetName = "Tables"
+
+        if not for_tableu:
+            self.__out_ws = self.out.get_current_ws()
+            self.__out_ws.get_sheet().set_column(0, 0, 25)
+            self.__row_start = self.__out_ws.get_current_row()
+            if self.out.many_sheets:
+                self.__out_ws = Sheet(output, self.__SheetName)
 
     def write(self, *args):
         lst = list(args)
-        if re.search('^[0-9.]+%$', str(lst[2].encode('utf8','replace'))):
-            lst[2] = str(lst[2]).encode('utf8','replace').replace('%','').decode('utf8')
+        if re.search('^[0-9.]+%$', str(lst[2].encode('utf8', 'replace'))):
+            lst[2] = str(lst[2]).encode('utf8', 'replace').replace('%', '').decode('utf8')
             lst[2] = float(lst[2])/100
             if not (len(lst) > 4 and lst[4] == "total row"):
                 if len(lst) == 3:
@@ -76,14 +95,16 @@ class Table:
         return string
 
     def append_to_table_of_content(self):
-        self.out.TableOfContent.write('<table>\n'
-                                      + '<table_id>' + self.wrap_write_to_xml(str(self.__sheet_count)) + '</table_id>\n'
-                                      + '<sheet_name>' + self.wrap_write_to_xml(self.__out_ws.get_sheetname().encode('utf8')) + '</sheet_name>\n'
-                                      + '<name>' + self.wrap_write_to_xml(self.__TableName.encode('utf8')) + '</name>\n'
-                                      + '<b_text>' + self.wrap_write_to_xml(self.__BaseText.encode('utf8')) + '</b_text>\n'
-                                      + '<total>' + self.wrap_write_to_xml(self.__Total.encode('utf8')) + '</total>\n'
-                                      + '<row_start>' + self.wrap_write_to_xml(str(self.__row_start + 1)) + '</row_start>\n'
-                                      + '</table>\n')
+        if not self.__for_tableu:
+            self.out.TableOfContent\
+                .write('<table>\n'
+                       + '<table_id>' + self.wrap_write_to_xml(str(self.__sheet_count)) + '</table_id>\n'
+                       + '<sheet_name>' + self.wrap_write_to_xml(self.__out_ws.get_sheetname().encode('utf8')) + '</sheet_name>\n'
+                       + '<name>' + self.wrap_write_to_xml(self.__TableName.encode('utf8')) + '</name>\n'
+                       + '<b_text>' + self.wrap_write_to_xml(self.__BaseText.encode('utf8')) + '</b_text>\n'
+                       + '<total>' + self.wrap_write_to_xml(self.__Total.encode('utf8')) + '</total>\n'
+                       + '<row_start>' + self.wrap_write_to_xml(str(self.__row_start + 1)) + '</row_start>\n'
+                       + '</table>\n')
 
     def set__table_name(self, table_name):
         self.__TableName = table_name
@@ -256,10 +277,11 @@ class Table:
         self.print_title(row)
 
     def print_footer(self):
-        self.__out_ws.add_to_current_row(1)
-        for row in self.footer:
-            self.print_title(row)
+        if not self.__for_tableu:
             self.__out_ws.add_to_current_row(1)
+            for row in self.footer:
+                self.print_title(row)
+                self.__out_ws.add_to_current_row(1)
 
     def print_center(self, row):
         i = 0
@@ -320,17 +342,214 @@ class Table:
         self.__out_ws.add_to_current_row(1)
     
     def fill_data(self, row):
-        if row[0].find("$$sheet_name$$") >= 0:
-            process_sheet_name_row(row)
+        if row[0].find("$$sheet_name$$") >= 0 and not self.__for_tableu:
+            self.process_sheet_name_row(row)
             return 0
         self.data.append(row)
 
     def process_sheet_name_row(self, row):
         row[0] = row[0].replace("$$sheet_name$$", "")
-        self.__out_ws = Sheet(self.out, row[0])
-        self.__row_start = 0
-        self.out.set_current_ws(self.__out_ws)
-        
+        if not self.__for_tableu:
+            self.__out_ws = Sheet(self.out, row[0])
+            self.__row_start = 0
+            self.out.set_current_ws(self.__out_ws)
+        else:
+            self.out.set_current_ws(row[0])
+
+    def get_total_row_num(self):
+        for x, row in enumerate(self.data):
+            if self.get_row_type(row) == 9:
+                return x
+
+    def get_break_count(self, total_row_num):
+        cnt = 0
+        for x in self.data[:total_row_num]:
+            if self.get_row_type(x) == 3:
+                cnt += 1
+        return cnt
+
+    def get_has_t_stat(self, total_row_num):
+        for x in self.data[:total_row_num]:
+            if self.get_row_type(x) == 6:
+                return True
+        return False
+
+    def get_is_weighted(self, total_row_num):
+        for x in self.data[:total_row_num]:
+            if self.get_row_type(x) == 10:
+                return True
+        return False
+
+    def get_title(self):
+        first = True
+        for x in self.data:
+            if self.get_row_type(x) == 1:
+                if first:
+                    first = False
+                    continue
+                return x[0]
+
+    def is_tstat(self, row):
+        if re.match(r"[a-zA-Z]", "".join(row[1:])):
+            return True
+        return False
+
+    def is_perc(self, row):
+        if "%" in "".join(row[1:]):
+            return True
+        return False
+
+    def is_abs(self, row):
+        if re.search(r"[0-9]", "".join(row[1:])) and \
+                        "%" not in "".join(row[1:]):
+            return True
+        return False
+
+    def get_has_something(self, total_row_num, func):
+        bo = False
+        for x in self.data[total_row_num:]:
+            if func(x):
+                bo = True
+        return bo
+
+    def get_row_type_v2(self, row):
+        if self.is_abs(row):
+            return "abs"
+        elif self.is_perc(row):
+            return "perc"
+        elif self.is_tstat(row):
+            return "tstat"
+        else:
+            "NA"
+
+    def get_long_table_headers(self, get_total_row_num, headers_len):
+        break_count = self.get_break_count(get_total_row_num)
+        has_t_stat = self.get_has_t_stat(get_total_row_num)
+        is_weighted = self.get_is_weighted(get_total_row_num)
+        has_abs = self.get_has_something(get_total_row_num, self.is_abs)
+        has_perc = self.get_has_something(get_total_row_num, self.is_perc)
+        headers = ["Statement:"]
+        if has_t_stat:
+            headers_len -= 1
+        if is_weighted:
+            headers_len -= 2
+        else:
+            headers_len -= 1
+        # for break
+        headers_len -= 1
+        for x in xrange(headers_len):
+            headers.append("Head {}:".format(x + 1))
+
+        headers.append("Break:")
+
+        if has_t_stat:
+            headers.append("Letter:")
+
+        if is_weighted:
+            headers.append("Unweighted base:")
+            headers.append("Weighted base:")
+        else:
+            headers.append("Total")
+
+        if has_abs:
+            headers.append("Absolutes:")
+
+        if has_perc:
+            headers.append("%")
+
+        if has_t_stat:
+            headers.append("T-test")
+        headers.append("Sheet name:")
+        headers.append("Title:")
+        return headers
+
+    def print_timeit(self, t1, st):
+        t2 = datetime.now()
+        print (st + str(t2 - t1))
+        return t2
+
+    def get_long_table(self):
+        f = self.print_timeit(datetime.now(), "")
+        headers = []
+        total_row_num = self.get_total_row_num() + 1
+        for x in self.data[:total_row_num]:
+            prev = ""
+            row = []
+            for y in x:
+                if y == "":
+                    item = prev
+                else:
+                    prev = y
+                    item = y
+                row.append(item)
+            if prev != "" and len(row) > 1:
+                headers.append(row[1:])
+        f = self.print_timeit(f, "1: ")
+
+        prev = ""
+        out = []
+        cnt = 1
+        max_rows_per_st = 0
+        for x in self.data[total_row_num:]:
+            if x[0] != "":
+                prev = x[0]
+                cnt = 1
+                out.append([x[0], 1] + x[1:])
+            else:
+                cnt += 1
+                out.append([prev, cnt] + x[1:])
+            if cnt > max_rows_per_st:
+                max_rows_per_st = cnt
+
+        f = self.print_timeit(f, "2: ")
+        if max_rows_per_st == 3:
+            for x in out:
+                if x[0] in mean_escapes:
+                    x[1] += 1
+
+        f = self.print_timeit(f, "3: ")
+        multi_index = []
+        for y in xrange(len(headers[0])):
+            tup = []
+            for x in xrange(len(headers)):
+                tup.append(headers[x][y])
+            multi_index.append(tuple(tup))
+        index = pd.MultiIndex.from_tuples(multi_index)
+        f = self.print_timeit(f, "4: ")
+
+        data = pd.DataFrame(out).set_index([0, 1])
+        data.columns = index
+        temp = data
+        f = self.print_timeit(f, "5: ")
+
+        for x in xrange(len(headers)):
+            temp = temp.stack(0)
+        # temp = temp.stack(list(xrange(len(headers))))
+        temp = temp.unstack(1)
+        f = self.print_timeit(f, "6: ")
+        # new = pd.read_csv(StringIO(temp.to_csv(encoding='utf8', header=False).decode("utf-8")), header=None)
+        new = temp.reset_index()
+        f = self.print_timeit(f, "7: ")
+
+        new["Sheet name:"] = self.out.get_current_ws()
+        new["Title:"] = self.get_title()
+        new_headers = self.get_long_table_headers(total_row_num, len(multi_index[0]))
+        if len(new.columns) < len(new_headers):
+            new_headers.remove("Absolutes:")
+        new.columns = new_headers
+        reordered = new[[x for x in order if x in new.columns]]
+        # sorted_df = reordered.sort_values(["Letter:", "Statement:"])
+        sort_by = ["Statement:"]
+        if "Letter:" in reordered.columns:
+            sort_by.append("Letter:")
+        sorted_df = reordered.sort_values(sort_by)
+        f = self.print_timeit(f, "8: ")
+        self.out.file.write(
+            sorted_df.to_csv(encoding='utf8',
+                             index=False,
+                             header=self.out.print_headers()))
+        f = self.print_timeit(f, "9: ")
+
     def loop_recorded_rows(self):
         self.print_link_to_contents()
         i = 0
@@ -343,7 +562,13 @@ class Table:
             #    i += 1; continue
             self.print_content(row)
             i += 1
-        
+
+    def process_table(self):
+        if self.__for_tableu:
+            self.get_long_table()
+        else:
+            self.loop_recorded_rows()
+
     def set_btext_obj(self, obj):
         self.baseTextObj = obj
         
@@ -355,4 +580,4 @@ class Table:
         
     def get_data_rows(self):
         return len(self.data)
-        
+

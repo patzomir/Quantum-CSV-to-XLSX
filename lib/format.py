@@ -15,6 +15,7 @@ input_document = 'Amber_11-03-16_uwt_v4.csv'
 many_sheets = True
 output_excel = 'formatted.xlsx'
 decoding = 'cp1251'
+tableu_format = False
 #####
 
 # CHANGED VIA IN-LINE ARGUMENTS
@@ -29,9 +30,20 @@ if len(sys.argv) > 4:
         print "The argument for many sheets should be integer! The conversion will continue by default: to many sheets."
         many_sheets = True
 
+if len(sys.argv) > 5:
+    try:
+        if int(sys.argv[5]) >= 1:
+            tableu_format = True
+    except ValueError as verr:
+        print "The argument for many sheets should be integer! The conversion will continue by default: to tableu_format."
+        tableu_format = False
 
 # create output object
-out = fl.Output(output_excel, title_row_num, many_sheets)
+out = None
+if tableu_format:
+    out = fl.CsvOutput(output_excel)
+else:
+    out = fl.Output(output_excel, title_row_num, many_sheets)
 
 
 def decode_from_csv(row):
@@ -65,12 +77,12 @@ for utf8_row in reader:
     if row[0].find('$$sheet_name$$') >= 0:  tab.process_sheet_name_row(row);continue
     if row[0] == "#page":
         if not frow:
-            tab.loop_recorded_rows()
+            tab.process_table()
             tab.print_footer()
-            if many_sheets: tab.close_file()
+            if many_sheets and not tableu_format: tab.close_file()
             tab.append_to_table_of_content()
-            if not many_sheets: out.get_current_ws().add_to_current_row(2 + tab.get_current_row())
-        tab = table.Table(out, out.get_sheet_count())
+            if not many_sheets and not tableu_format: out.get_current_ws().add_to_current_row(2 + tab.get_current_row())
+        tab = table.Table(out, out.get_sheet_count(), tableu_format)
         out.increment_sheet_count()
         frow = False
         row_count = 0
@@ -86,16 +98,19 @@ for utf8_row in reader:
     else:
         tab.fill_data(row)
     row_count += 1
-tab.loop_recorded_rows()
+tab.process_table()
 tab.print_footer()
 tab.append_to_table_of_content()
 f.close()
 
 
-out.close_toc()
-out.add_toc()
-out.check_tables_sheet()
-out.close()
+if not tableu_format:
+    out.close_toc()
+    out.add_toc()
+    out.check_tables_sheet()
+    out.close()
+else:
+    out.file.close()
 
 print (datetime.now() - t1)
 print ("FINISH")
