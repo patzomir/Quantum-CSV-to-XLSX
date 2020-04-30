@@ -10,11 +10,12 @@ from Sheet import Sheet
 class CsvOutput:
     many_sheets = False
 
-    def __init__(self, output_file):
+    def __init__(self, output_file, title_row_num):
         self.worksheet = ""
         self.first_table = True
         self.output_file = output_file
         self.file = self.clear_out_file()
+        self.title_row_num = title_row_num
 
     def clear_out_file(self):
         return open(self.output_file, 'w')

@@ -10,9 +10,8 @@ from datetime import datetime
 import os
 
 
-
-order = ["Sheet name:", "Title:", "Head 1:", "Head 2:", "Head 3:",
-         "Head 4:", "Head 5:", "Break:",
+order = ["Sheet name:", "Table number:", "Title:", "Head 1:",
+         "Head 2:", "Head 3:", "Head 4:", "Head 5:", "Break:",
          "Letter:", "Statement:", "Unweighted base:", "Weighted base:",
          "Total", "Absolutes:", "%", "T-test"]
 
@@ -56,15 +55,14 @@ class Table:
 
         if self.out.many_sheets:
             self.__SheetName = "T{0}".format(sheet_count)
+            self.__out_ws = Sheet(output, self.__SheetName)
         else:
             self.__SheetName = "Tables"
+            self.__out_ws = self.out.get_current_ws()
 
         if not for_tableu:
-            self.__out_ws = self.out.get_current_ws()
             self.__out_ws.get_sheet().set_column(0, 0, 25)
             self.__row_start = self.__out_ws.get_current_row()
-            if self.out.many_sheets:
-                self.__out_ws = Sheet(output, self.__SheetName)
 
     def write(self, *args):
         lst = list(args)
@@ -155,6 +153,7 @@ class Table:
         # Row Type 8 = foot note
         # Row Type 9 = Total row
         # Row Type 10 = Unweighted Base
+        # Row Type 11 = Table number
         rtype = 0
         temp = 0
         tstat_cb = True
@@ -178,7 +177,7 @@ class Table:
         if temp == 1:
             if len(row[0]) > 0:
                 check = 0
-                for i in range(2,6):
+                for i in range(2, 6):
                     if self.row_types[i] > 0:
                         check += 1
                 if check > 0:
@@ -186,6 +185,8 @@ class Table:
                 else:
                     if len(self.__TableName) > 0:
                         return 7
+                    # if re.match(ur"[0-9]+", row[0]):
+                    #     return 11
                     return 1
         if len(row[0]) == 0:
             if self.row_types[5] > 0:
@@ -312,7 +313,7 @@ class Table:
         self.current_row_type = r_type        
         if r_type == 0 and self.row_types[5] == 0:
             return
-        if not r_type in [ 1, 7 ] and self.btxt == 0: 
+        if not r_type in [1, 7] and self.btxt == 0:
             self.baseTextObj.process()
             self.btxt = 1
         if r_type == 0:
@@ -382,12 +383,12 @@ class Table:
 
     def get_title(self):
         first = True
-        for x in self.data:
-            if self.get_row_type(x) == 1:
+        for num, x in enumerate(self.data):
+            if self.get_row_type(x) == 1 and not re.match(ur"^[0-9]+$", x[0]):
                 if first:
                     first = False
                     continue
-                return x[0]
+                return num, x[0]
 
     def is_tstat(self, row):
         if re.match(r"[a-zA-Z]", "".join(row[1:])):
@@ -461,6 +462,7 @@ class Table:
             headers.append("T-test")
         headers.append("Sheet name:")
         headers.append("Title:")
+        headers.append("Table number:")
         return headers
 
     def print_timeit(self, t1, st):
@@ -469,10 +471,9 @@ class Table:
         return t2
 
     def get_long_table(self):
-        f = self.print_timeit(datetime.now(), "")
         headers = []
         total_row_num = self.get_total_row_num() + 1
-        for x in self.data[:total_row_num]:
+        for x in self.data[self.out.title_row_num:total_row_num]:
             prev = ""
             row = []
             for y in x:
@@ -484,7 +485,6 @@ class Table:
                 row.append(item)
             if prev != "" and len(row) > 1:
                 headers.append(row[1:])
-        f = self.print_timeit(f, "1: ")
 
         prev = ""
         out = []
@@ -501,13 +501,11 @@ class Table:
             if cnt > max_rows_per_st:
                 max_rows_per_st = cnt
 
-        f = self.print_timeit(f, "2: ")
         if max_rows_per_st == 3:
             for x in out:
                 if x[0] in mean_escapes:
                     x[1] += 1
 
-        f = self.print_timeit(f, "3: ")
         multi_index = []
         for y in xrange(len(headers[0])):
             tup = []
@@ -515,24 +513,21 @@ class Table:
                 tup.append(headers[x][y])
             multi_index.append(tuple(tup))
         index = pd.MultiIndex.from_tuples(multi_index)
-        f = self.print_timeit(f, "4: ")
 
         data = pd.DataFrame(out).set_index([0, 1])
         data.columns = index
         temp = data
-        f = self.print_timeit(f, "5: ")
 
         for x in xrange(len(headers)):
             temp = temp.stack(0)
         # temp = temp.stack(list(xrange(len(headers))))
         temp = temp.unstack(1)
-        f = self.print_timeit(f, "6: ")
         # new = pd.read_csv(StringIO(temp.to_csv(encoding='utf8', header=False).decode("utf-8")), header=None)
         new = temp.reset_index()
-        f = self.print_timeit(f, "7: ")
 
         new["Sheet name:"] = self.out.get_current_ws()
-        new["Title:"] = self.get_title()
+        row_num, new["Title:"] = self.get_title()
+        new["Table number:"] = self.data[row_num - 1][0]
         new_headers = self.get_long_table_headers(total_row_num, len(multi_index[0]))
         if len(new.columns) < len(new_headers):
             new_headers.remove("Absolutes:")
@@ -543,12 +538,11 @@ class Table:
         if "Letter:" in reordered.columns:
             sort_by.append("Letter:")
         sorted_df = reordered.sort_values(sort_by)
-        f = self.print_timeit(f, "8: ")
         self.out.file.write(
             sorted_df.to_csv(encoding='utf8',
                              index=False,
-                             header=self.out.print_headers()))
-        f = self.print_timeit(f, "9: ")
+                             header=self.out.print_headers(),
+                             line_terminator="\n"))
 
     def loop_recorded_rows(self):
         self.print_link_to_contents()

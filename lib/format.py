@@ -41,7 +41,7 @@ if len(sys.argv) > 5:
 # create output object
 out = None
 if tableu_format:
-    out = fl.CsvOutput(output_excel)
+    out = fl.CsvOutput(output_excel, title_row_num)
 else:
     out = fl.Output(output_excel, title_row_num, many_sheets)
 
@@ -86,7 +86,7 @@ for utf8_row in reader:
         out.increment_sheet_count()
         frow = False
         row_count = 0
-    elif row_count == title_row_num:
+    elif row_count == title_row_num and not tableu_format:
         tname = fl.TableName(tab, row)
     elif (row[0].find("Base ") >= 0 or
           row[0].find("Base:") >= 0 or
